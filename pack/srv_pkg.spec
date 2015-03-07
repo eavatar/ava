@@ -12,6 +12,7 @@ if sys.platform.startswith('win32'):
     exe_name = 'ava.exe'
     app_icon = os.path.join(app_path, 'res/eavatar.ico')
     ext_name = '.win'
+    run_strip = False
     hiddenimports.append('depends_win32.py')
 elif sys.platform.startswith('linux'):
     ext_name = '.lin'
@@ -41,7 +42,7 @@ exe = EXE(pyz,
           exclude_binaries=True,
           name=os.path.join('build', 'pyi.'+sys.platform, 'server', exe_name),
           debug=False,
-          strip=True,
+          strip=run_strip,
           upx=True,
           icon= os.path.join(app_path, 'home/static/images/eavatar.ico'),
           console=True )

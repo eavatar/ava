@@ -76,7 +76,8 @@ class Agent(object):
         self._greenlets = []
         self._context = context.instance(self)
         self._engines = []
-        signal.signal(signal.SIGHUP, signal_handler)
+        if hasattr(signal, 'SIGHUP'):
+            signal.signal(signal.SIGHUP, signal_handler)
 
     def add_child_greenlet(self, child):
         self._greenlets.append(child)
