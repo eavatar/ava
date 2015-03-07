@@ -1,0 +1,38 @@
+machine:
+  services:
+  - docker
+
+checkout:
+  post:
+  - git submodule sync
+  - git submodule update --init
+
+dependencies:
+  override:
+    - sudo mkdir -p /usr/local/lib
+    - sudo cp src/libs/libsodium.so.13.1.0 /usr/local/lib/
+    - sudo ln -s /usr/local/lib/libsodium.so.13.1.0 /usr/local/lib/libsodium.so.13
+    - sudo ln -s /usr/local/lib/libsodium.so.13.1.0 /usr/local/lib/libsodium.so
+    - sudo pip install -U pip
+    - sudo easy_install -U setuptools
+    - sudo pip install docker-compose
+    - sudo pip install -r requirements/requirements_test.txt
+    - python bootstrap.py
+    - bin/buildout
+
+test:
+  override:
+    - bin/py.test -vvv src/eavatar.ava/tests/unit/
+    - bin/py.test -vvv src/eavatar.ava/tests/integration/
+    - ./pack/build_srv_pkg.sh
+    - docker-compose up -d ; sleep 5
+    - bin/py.test -vvv src/eavatar.ava/tests/functional/
+
+deployment:
+  hub:
+    branch: master
+    commands:
+      - docker build -t eavatar/ava:$CIRCLE_SHA1 .
+      - docker tag eavatar/ava:$CIRCLE_SHA1 eavatar/ava:latest
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker push eavatar/ava

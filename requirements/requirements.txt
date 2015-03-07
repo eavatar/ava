@@ -1,0 +1,12 @@
+PyDispatcher==2.0.5
+base58==0.2.1
+bottle==0.12.8
+gevent==1.0.1
+greenlet==0.4.5
+libnacl==1.4.0
+lmdb==0.84
+pyasn1==0.1.7
+pycparser==2.10
+pyscrypt==1.6.2
+requests==2.4.3
+six==1.9.0
