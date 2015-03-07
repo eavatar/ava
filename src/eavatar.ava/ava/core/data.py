@@ -41,7 +41,7 @@ class DataEngine(DataEngineBase):
     def start(self, ctx=None):
         logger.debug("Starting data engine...")
 
-        self.datapath = os.path.join(environ.home_dir(), _DATA_FILE_DIR)
+        self.datapath = os.path.join(environ.pod_dir(), _DATA_FILE_DIR)
         logger.debug("Data path: %s", self.datapath)
 
         try:

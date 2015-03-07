@@ -67,7 +67,7 @@ def base_dir():
     return get_environ().base_dir
 
 
-def home_dir():
+def pod_dir():
     """
     Gets the home directory.
     :return:

@@ -46,7 +46,7 @@ class ModuleEngine(object):
 
     def __init__(self):
         self.modules = {}
-        self.modules_path = os.path.join(environ.home_dir(), _MODULES_DIR, 'enabled')
+        self.modules_path = os.path.join(environ.pod_dir(), _MODULES_DIR, 'enabled')
         self.modules_path = os.path.abspath(self.modules_path)
 
     def _scan_modules(self):
@@ -54,7 +54,7 @@ class ModuleEngine(object):
         return glob.glob(pattern)
 
     def _load_modules(self, ctx):
-        sys.path.append(environ.home_dir())
+        sys.path.append(environ.pod_dir())
         logger.debug("Modules directory: %s", self.modules_path)
 
         module_files = self._scan_modules()

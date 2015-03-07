@@ -44,14 +44,14 @@ exe = EXE(pyz,
           debug=False,
           strip=run_strip,
           upx=True,
-          icon= os.path.join(app_path, 'home/static/images/eavatar.ico'),
+          icon= os.path.join(app_path, 'pod/static/images/eavatar.ico'),
           console=True )
 
 
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,
-               Tree(os.path.join(app_path, 'home'), 'home', excludes=['*.pyc']),
+               Tree(os.path.join(app_path, 'pod'), 'pod', excludes=['*.pyc']),
                a.datas,
                strip=run_strip,
                upx=True,
