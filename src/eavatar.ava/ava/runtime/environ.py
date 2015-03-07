@@ -41,7 +41,7 @@ class Environment(object):
         self.data_dir = os.path.join(self.home_dir, DATA_DIR_NAME)
         self.logs_dir = os.path.join(self.home_dir, LOGS_DIR_NAME)
 
-        _logger.debug("Home dir: %s", self.home_dir)
+        # _logger.debug("Home dir: %s", self.home_dir)
 
         # Flag indicating if the runtime is launched by a shell.
         self.has_shell = False

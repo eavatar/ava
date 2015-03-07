@@ -7,7 +7,6 @@ The launcher for EAvatar to run in a text console or headless environment.
 import os
 import sys
 import logging
-import click
 import multiprocessing
 
 #makes multiprocessing work when in freeze mode.
@@ -19,6 +18,15 @@ import depends
 # prevent IDE regarding depends as not used.
 depends.absolute_import
 
+# prevent no handler warning
+try:
+    from logging import NullHandler
+except ImportError:
+    class NullHandler(logging.Handler):
+        def emit(self, record):
+            pass
+
+
 logger = logging.getLogger("ava")
 
 
@@ -29,24 +37,7 @@ def package_in_path(pkg):
     return False
 
 
-@click.group()
-def cli():
-    pass
-
-
-@cli.command()
-def run():
-    from ava.shell.console import Shell
-    logger.debug("Starting the shell...")
-    shell = Shell()
-    shell.do_run()
-    logger.debug("Shell stopped.")
-
-
-def main():
-    logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s - %(message)s', level=logging.DEBUG, disable_existing_loggers=False)
-
-
+def setup_eggs_folder():
     # add packages in 'eggs' to sys.path in case PyInstaller haven't done that.
     if hasattr(sys, "_MEIPASS") and not package_in_path('eavatar.core'):
         logger.debug("'eggs' not in path, try to add them.")
@@ -63,7 +54,16 @@ def main():
         if len(errors) > 0:
             logger.error("failed to load package(s): %s", errors)
 
-    cli()
+
+def main():
+
+    logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s - %(message)s', level=logging.DEBUG, disable_existing_loggers=False)
+
+    setup_eggs_folder()
+
+    from ava.cmds import cli
+
+    cli(auto_envvar_prefix='AVA')
 
 if __name__ == '__main__':
     main()

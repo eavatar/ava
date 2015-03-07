@@ -13,9 +13,9 @@ from ConfigParser import SafeConfigParser
 from ava.runtime import environ
 
 
-AGENT_CONF = os.path.join(environ.conf_dir(), b'agent.ini')
-LOGGING_CONF = os.path.join(environ.conf_dir(), b'logging.ini')
-PACKAGES_CONF = os.path.join(environ.conf_dir(), b'packages.ini')
+AGENT_CONF = os.path.join(environ.conf_dir(), u'agent.ini')
+LOGGING_CONF = os.path.join(environ.conf_dir(), u'logging.ini')
+PACKAGES_CONF = os.path.join(environ.conf_dir(), u'packages.ini')
 
 # The default configuration file is located at the base directory.
 
@@ -23,7 +23,8 @@ _defaults = dict(base_dir=environ.base_dir(),
                  conf_dir=environ.conf_dir(),
                  data_dir=environ.data_dir(),
                  pkgs_dir=environ.pkgs_dir(),
-                 logs_dir=environ.logs_dir())
+                 logs_dir=environ.logs_dir(),
+                 log_file=os.path.join(environ.logs_dir(), u"ava.log"))
 
 
 class ConfigFile(SafeConfigParser):
@@ -72,5 +73,6 @@ def packages(file=PACKAGES_CONF):
     return _packages
 
 # configure logging
+
 logging.config.fileConfig(LOGGING_CONF, defaults=_defaults)
 

@@ -14,9 +14,9 @@ setup(
     test_suite='nose.collector',
     zip_safe=False,
 
-    entry_points = {
+    entry_points={
         'console_scripts': [
-            'ava = ava:main',
+            'ava = avacli:main',
         ],
     },
 
