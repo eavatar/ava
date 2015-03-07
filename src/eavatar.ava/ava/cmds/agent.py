@@ -11,9 +11,17 @@ logger = logging.getLogger(__name__)
 
 
 @cli.command()
-def run():
+@click.pass_context
+def run(ctx):
+    """ Run the agent
+
+    """
     from ava.shell.console import Shell
-    logger.debug("Starting the shell...")
+    if ctx.obj['verbosity'] > 1:
+        logger.debug("Starting the shell...")
+
     shell = Shell()
     shell.do_run()
-    logger.debug("Shell stopped.")
+
+    if ctx.obj['verbosity'] > 1:
+        logger.debug("Shell stopped.")

@@ -64,10 +64,10 @@ def agent(file=AGENT_CONF):
 _packages = None
 
 
-def packages(file=PACKAGES_CONF):
+def packages(conf_file=PACKAGES_CONF):
     global _packages
     if not _packages:
-        _packages = ConfigFile(file)
+        _packages = ConfigFile(conf_file)
         _packages.load()
 
     return _packages
