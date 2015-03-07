@@ -25,7 +25,7 @@ else:
     ext_name = ''
 
 
-a = Analysis([os.path.join(app_path,'ava.py')],
+a = Analysis([os.path.join(app_path,'avacli.py')],
              pathex=['src'],
              hiddenimports=hiddenimports,
              hookspath=None,

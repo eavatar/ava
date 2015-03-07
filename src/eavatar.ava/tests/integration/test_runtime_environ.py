@@ -11,7 +11,7 @@ class RuntimeEnvironTest(unittest.TestCase):
 
     def test_work_home(self):
         env = environ.Environment()
-        self.assertTrue(os.path.isdir(env.home_dir))
+        self.assertTrue(os.path.isdir(env.pod_dir))
         self.assertTrue(os.path.isdir(env.conf_dir))
         self.assertTrue(os.path.isdir(env.data_dir))
         self.assertTrue(os.path.isdir(env.logs_dir))
