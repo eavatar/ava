@@ -16,7 +16,7 @@ dependencies:
     - sudo pip install -U pip
     - sudo easy_install -U setuptools
     - sudo pip install docker-compose
-    - sudo pip install -r requirements/requirements_test.txt
+    - sudo pip install -r requirements_test.txt
     - python bootstrap.py
     - bin/buildout
 
