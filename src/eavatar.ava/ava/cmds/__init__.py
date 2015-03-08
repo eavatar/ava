@@ -4,3 +4,4 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from .cli import cli
 from .agent import run
+from .info import version
