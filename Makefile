@@ -6,7 +6,7 @@ pack: pack/srv_pkg.spec
 
 
 pack_in_container:
-	pip install -r requirements/requirements.txt
+	pip install -r requirements.txt
 	cp -a /app /app_pack
 	chown -R ava:ava /app_pack
 	su - ava -c "cd /app_pack && ./pack/build_srv_pkg.sh"
