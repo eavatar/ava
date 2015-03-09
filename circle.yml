@@ -25,7 +25,7 @@ test:
     - bin/py.test -vvv src/eavatar.ava/tests/unit/
     - bin/py.test -vvv src/eavatar.ava/tests/integration/
     - ./pack/build_srv_pkg.sh
-    - cp src/libs/libsodium.so.13.1.0 /dist/ava/libsodium.so
+    - cp src/libs/libsodium.so.13.1.0 dist/ava/libsodium.so
 #    - docker-compose up -d ; sleep 5
 #    - bin/py.test -vvv src/eavatar.ava/tests/functional/
 
