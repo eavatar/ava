@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="ava",
-    version="0.1.0",
+    version="0.1.1",
     description="EAvatar Ava - A versatile agent.",
     # package_dir={'': ''},
     packages=find_packages(exclude=['tests']),

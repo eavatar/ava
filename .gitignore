@@ -72,3 +72,5 @@ waf-*
 
 .idea
 .DS_Store
+src/eavatar.ava/dist
+src/eavatar.ava/build

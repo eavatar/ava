@@ -10,7 +10,7 @@ run_strip = True
 
 if sys.platform.startswith('win32'):
     exe_name = 'ava.exe'
-    app_icon = os.path.join(app_path, 'res/eavatar.ico')
+    app_icon = os.path.join(app_path, 'pod/static/eavatar.ico')
     ext_name = '.win'
     run_strip = False
     hiddenimports.append('depends_win32.py')
@@ -44,7 +44,7 @@ exe = EXE(pyz,
           debug=False,
           strip=run_strip,
           upx=True,
-          icon= os.path.join(app_path, 'pod/static/images/eavatar.ico'),
+          icon= os.path.join(app_path, 'pod/static/eavatar.ico'),
           console=True )
 
 
