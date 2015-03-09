@@ -25,8 +25,8 @@ test:
     - bin/py.test -vvv src/eavatar.ava/tests/unit/
     - bin/py.test -vvv src/eavatar.ava/tests/integration/
     - ./pack/build_srv_pkg.sh
-    - docker-compose up -d ; sleep 5
-    - bin/py.test -vvv src/eavatar.ava/tests/functional/
+#    - docker-compose up -d ; sleep 5
+#    - bin/py.test -vvv src/eavatar.ava/tests/functional/
 
 deployment:
   hub:

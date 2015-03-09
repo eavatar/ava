@@ -2,7 +2,6 @@
 from __future__ import (absolute_import, division,
                         print_function, unicode_literals)
 
-import sys
 import json
 import click
 from ava.util import key as keyutil
@@ -22,8 +21,6 @@ def gen_random_key(ctx):
 
 
 @cli.group()
-@click.option('--verbose', '-v', is_flag=True,
-              help='Enables verbose mode.')
 @click.pass_context
 def key(ctx, verbose):
     """ Key management
