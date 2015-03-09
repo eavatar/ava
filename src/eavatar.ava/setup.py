@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="eavatar.ava",
+    name="ava",
     version="0.1.0",
     description="EAvatar Ava - A versatile agent.",
     # package_dir={'': ''},
