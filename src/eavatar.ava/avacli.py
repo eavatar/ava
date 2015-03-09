@@ -14,16 +14,8 @@ multiprocessing.freeze_support()
 # imports dependencies for PyInstaller to figure out what to include.
 import depends
 
-platform = sys.platform
 # prevent IDE regarding depends as not used.
 depends.absolute_import
-
-if platform.startswith("win32"):
-    import depends_win32
-elif platform.startswith("darwin"):
-    import depends_osx
-elif platform.startswith("linux"):
-    import depends_linux
 
 
 # prevent no handler warning
