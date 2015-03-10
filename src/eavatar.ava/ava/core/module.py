@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 _MODULES_DIR = 'mods'
 
 # the package name for modules.
-_MODULE_PKG = 'mods.enabled.'
+_MODULE_PKG = 'mods.'
 
 
 class ModuleInfo(object):
@@ -46,7 +46,7 @@ class ModuleEngine(object):
 
     def __init__(self):
         self.modules = {}
-        self.modules_path = os.path.join(environ.pod_dir(), _MODULES_DIR, 'enabled')
+        self.modules_path = os.path.join(environ.pod_dir(), _MODULES_DIR)
         self.modules_path = os.path.abspath(self.modules_path)
 
     def _scan_modules(self):

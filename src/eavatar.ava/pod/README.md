@@ -4,9 +4,7 @@ The directory structure:
 ├── conf              -- configuration files
 ├── data              -- data folder
 ├── logs              -- log files
-├── mods              
-│   ├── available     -- available modules
-│   └── enabled       -- enabled modules
+├── mods              -- module files
 ├── pkgs              -- extension packages
 └── static            -- static web resources such ico, images, css, etc.
 

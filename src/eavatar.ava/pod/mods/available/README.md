@@ -1,1 +1,0 @@
-Put inactive resource scripts in this folder.
