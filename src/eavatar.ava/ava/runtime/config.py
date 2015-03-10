@@ -3,76 +3,45 @@
 """
 Configuration file reading/writing.
 """
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
 
+import codecs
 import logging
 import logging.config
 import os.path
-from ConfigParser import SafeConfigParser
+from bottle import template
+
+from yaml import load
+
+try:
+    from yaml import CLoader as Loader, CDumper as Dumper
+except ImportError:
+    from yaml import Loader, Dumper
 
 from ava.runtime import environ
 
 
-AGENT_CONF = os.path.join(environ.conf_dir(), u'agent.ini')
-LOGGING_CONF = os.path.join(environ.conf_dir(), u'logging.ini')
-PACKAGES_CONF = os.path.join(environ.conf_dir(), u'packages.ini')
+AGENT_CONF = os.path.join(environ.conf_dir(), u'ava.yml')
 
 # The default configuration file is located at the base directory.
 
-_defaults = dict(base_dir=environ.base_dir(),
-                 conf_dir=environ.conf_dir(),
-                 data_dir=environ.data_dir(),
-                 pkgs_dir=environ.pkgs_dir(),
-                 logs_dir=environ.logs_dir(),
-                 log_file=os.path.join(environ.logs_dir(), u"ava.log"))
+settings = dict(base_dir=environ.base_dir(),
+                conf_dir=environ.conf_dir(),
+                data_dir=environ.data_dir(),
+                pkgs_dir=environ.pkgs_dir(),
+                logs_dir=environ.logs_dir(),
+                mods_dir=environ.mods_dir(),
+                )
 
 
-class ConfigFile(SafeConfigParser):
-    def __init__(self, filename, defaults=_defaults):
-        SafeConfigParser.__init__(self, defaults)
-        self.filename = os.path.abspath(filename)
+def load_conf(conf_file):
 
-    def load(self):
-        self.read(self.filename)
+    data = codecs.open(conf_file, 'rb', encoding='utf-8').read()
+    data = template(data, **settings)
+    return load(data, Loader=Loader)
 
-    def save(self):
-        with open(self.filename, 'wb') as fp:
-            self.write(fp)
-
-
-_agent = None
-
-
-def agent(file=AGENT_CONF):
-    global _agent
-    if not _agent:
-        _agent = ConfigFile(file)
-        _agent.add_section('agent')
-        _agent.add_section('webfront')
-        _agent.add_section('data')
-        _agent.add_section('extension')
-        # set defaults for various sections.
-
-        _agent.set('webfront', 'listen_port', '5000')
-        _agent.set('webfront', 'listen_addr', '127.0.0.1')
-
-        # loads more options from file.
-        _agent.load()
-
-    return _agent
-
-_packages = None
-
-
-def packages(conf_file=PACKAGES_CONF):
-    global _packages
-    if not _packages:
-        _packages = ConfigFile(conf_file)
-        _packages.load()
-
-    return _packages
+settings.update(load_conf(AGENT_CONF))
 
 # configure logging
-
-logging.config.fileConfig(LOGGING_CONF, defaults=_defaults)
-
+logging.config.dictConfig(settings['logging'])

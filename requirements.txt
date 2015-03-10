@@ -7,6 +7,7 @@ libnacl==1.4.0
 lmdb==0.84
 pycrypto==2.6.1
 PyDispatcher==2.0.5
+PyYAML==3.11
 pyscrypt==1.6.2
 requests==2.4.3
 six==1.9.0

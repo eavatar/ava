@@ -1,37 +1,26 @@
 # -*- coding: utf-8 -*-
 
-import os
 import unittest
-import tempfile
 
-from ava.runtime import config
+from ava.runtime import settings
 
 
 class RuntimeConfigTests(unittest.TestCase):
 
-    def setUp(self):
-        self.config = config.agent()
+    def test_should_have_dir_settings(self):
+        self.assertIsNotNone(settings.get('pkgs_dir'))
+        self.assertIsNotNone(settings.get('conf_dir'))
+        self.assertIsNotNone(settings.get('data_dir'))
+        self.assertIsNotNone(settings.get('logs_dir'))
 
-    def test_global_config(self):
-        self.assertIsNotNone(self.config)
+    def test_should_have_settings_for_webfront(self):
+        self.assertEqual(settings['webfront']['listen_port'], 5000)
 
-    def test_default_values_exist(self):
-        self.assertIsNotNone(self.config.get('DEFAULT', 'pkgs_dir'))
-        self.assertIsNotNone(self.config.get('DEFAULT', 'conf_dir'))
-        self.assertIsNotNone(self.config.get('DEFAULT', 'data_dir'))
-        self.assertIsNotNone(self.config.get('DEFAULT', 'logs_dir'))
+    def test_should_have_logging_settings(self):
+        handlers = settings['logging']['handlers']
+        self.assertIsNotNone(handlers)
+        log_file = handlers['file_handler']['filename']
+        #print(log_file)
+        self.assertIsNotNone(log_file)
 
-        self.assertEqual(self.config.getint('webfront', 'listen_port'), 5000)
 
-    def test_save_and_load_config_file(self):
-        handle, filepath = tempfile.mkstemp()
-        conf = config.ConfigFile(filepath)
-        conf.add_section('test')
-        conf.set('test', 'name', 'value')
-        conf.save()
-
-        conf2 = config.ConfigFile(filepath)
-        conf2.load()
-        self.assertEqual('value', conf2.get('test', 'name'))
-
-        os.remove(filepath)

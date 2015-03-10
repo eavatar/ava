@@ -6,7 +6,7 @@ import multiprocessing
 import logging
 from abc import ABCMeta, abstractmethod
 
-from ava.runtime import config
+from ava.runtime import settings
 
 
 logger = logging.getLogger(__name__)
@@ -87,7 +87,7 @@ class ShellBase(object):
     __metaclass__ = ABCMeta
 
     def __init__(self):
-        port = config.agent().getint("webfront", "listen_port")
+        port = settings['webfront']['listen_port']
         self.base_url = "http://127.0.0.1:%d/" % (port,)
         self.supervisor = Supervisor()
         self.shell_stopped = False

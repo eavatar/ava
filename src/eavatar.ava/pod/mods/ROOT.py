@@ -12,7 +12,7 @@ def serve_root():
 
 @route('/favicon.ico')
 def serve_favicon():
-    return static_file(b'favicon.ico')
+    return static_file(b'eavatar.ico')
 
 
 @route('/static/<filepath:path>')

@@ -5,7 +5,7 @@ import logging
 
 import pkg_resources
 
-from ava.runtime import environ, config
+from ava.runtime import environ, settings
 
 
 logger = logging.getLogger(__name__)
@@ -38,11 +38,7 @@ class PackageManager(object):
                 return
 
             for it in distributions:
-                enable_it = False
-                if config.packages().has_option("enabled", it.project_name):
-                    enable_it = config.packages().getboolean("enabled", it.project_name)
-                else:
-                    config.packages().set("enabled", it.project_name, 'false')
+                enable_it = it in settings["packages"]
 
                 if enable_it:
                     pkg_resources.working_set.add(it)

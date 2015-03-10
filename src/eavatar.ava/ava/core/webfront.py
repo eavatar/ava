@@ -7,7 +7,7 @@ import logging
 import gevent
 import bottle
 from gevent import pywsgi
-from ava.runtime import config
+from ava.runtime import settings
 from ava.runtime import environ
 
 
@@ -68,9 +68,9 @@ class WebfrontEngine(object):
     def start(self, ctx=None):
         logger.debug("Starting webfront engine...")
 
-        self.listen_port = config.agent().getint(_CONF_SECTION, 'listen_port')
-        self.listen_addr = config.agent().get(_CONF_SECTION, 'listen_addr')
-        self.secure_listen_port = config.agent().getint(_CONF_SECTION, 'secure_listen_port')
+        self.listen_port = settings[_CONF_SECTION]['listen_port']
+        self.listen_addr = settings[_CONF_SECTION]['listen_addr']
+        self.secure_listen_port = settings[_CONF_SECTION]['secure_listen_port']
         self.local_base_url = "http://127.0.0.1:%d/" % (self.listen_port,)
 
         logger.debug("Local base URL:%s", self.local_base_url)
