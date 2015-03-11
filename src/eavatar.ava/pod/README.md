@@ -1,6 +1,7 @@
 The working directory for the agent.
 
 The directory structure:
+├── apps              -- application manifests
 ├── conf              -- configuration files
 ├── data              -- data folder
 ├── logs              -- log files
@@ -10,3 +11,4 @@ The directory structure:
 
 __init__.py is to make pod folder be a valid package so that the structure is 
 maintained.
+

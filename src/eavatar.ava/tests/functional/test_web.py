@@ -8,7 +8,7 @@ import requests
 class ApiTest(unittest.TestCase):
 
     def setUp(self):
-        self.base_url = 'http://127.0.0.1:5000'
+        self.base_url = 'http://127.0.0.1:5080'
 
     #### Root resource ####
     def test_get_root_resource(self):
