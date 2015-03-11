@@ -1,0 +1,4 @@
+#!/bin/sh
+# for launching ava on Linux platform.
+BASEDIR=$(dirname $0)
+$BASEDIR/ava.exe

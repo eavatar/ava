@@ -4,7 +4,7 @@
 app_path = os.path.join('src', 'eavatar.ava')
 
 
-exe_name = 'ava'
+exe_name = 'ava.exe'
 hiddenimports = []
 run_strip = True
 
@@ -24,6 +24,24 @@ elif sys.platform.startswith('darwin'):
 else:
     ext_name = ''
 
+# for copying data file according to PyInstaller's recipe
+def Datafiles(*filenames, **kw):
+    import os
+
+    def datafile(path, strip_path=True):
+        parts = path.split('/')
+        path = name = os.path.join(*parts)
+        if strip_path:
+            name = os.path.basename(path)
+        return name, path, 'DATA'
+
+    strip_path = kw.get('strip_path', True)
+    return TOC(
+        datafile(filename, strip_path=strip_path)
+        for filename in filenames
+        if os.path.isfile(filename))
+
+#shfile = Datafiles('pack/ava', '')
 
 a = Analysis([os.path.join(app_path,'avacli.py')],
              pathex=['src'],
@@ -33,7 +51,7 @@ a = Analysis([os.path.join(app_path,'avacli.py')],
              excludes=['PyQt4', 'wx', 'django', 'Tkinter', 'gi.repository', 'objc', 'AppKit', 'Foundation'])
 
 run_strip = False
-
+run_upx = False
 
 pyz = PYZ(a.pure)
 exe = EXE(pyz,
@@ -43,7 +61,7 @@ exe = EXE(pyz,
           name=os.path.join('build', 'pyi.'+sys.platform, 'server', exe_name),
           debug=False,
           strip=run_strip,
-          upx=True,
+          upx=run_upx,
           icon= os.path.join(app_path, 'pod/static/eavatar.ico'),
           console=True )
 
@@ -53,7 +71,8 @@ coll = COLLECT(exe,
                a.zipfiles,
                Tree(os.path.join(app_path, 'pod'), 'pod', excludes=['*.pyc']),
                a.datas,
+#               shfile,
                strip=run_strip,
-               upx=True,
+               upx=run_upx,
                name=os.path.join('dist', 'ava'))
 
