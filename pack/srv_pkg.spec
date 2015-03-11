@@ -4,7 +4,7 @@
 app_path = os.path.join('src', 'eavatar.ava')
 
 
-exe_name = 'ava.exe'
+exe_name = 'ava'
 hiddenimports = []
 run_strip = True
 
