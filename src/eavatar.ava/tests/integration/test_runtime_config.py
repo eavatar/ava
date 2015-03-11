@@ -14,7 +14,7 @@ class RuntimeConfigTests(unittest.TestCase):
         self.assertIsNotNone(settings.get('logs_dir'))
 
     def test_should_have_settings_for_webfront(self):
-        self.assertEqual(settings['webfront']['listen_port'], 5000)
+        self.assertIsNotNone(settings['webfront']['listen_port'])
 
     def test_should_have_logging_settings(self):
         handlers = settings['logging']['handlers']
