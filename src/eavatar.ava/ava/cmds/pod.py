@@ -45,3 +45,10 @@ def init(folder):
             shutil.copytree(src_path, dst_path)
         else:
             shutil.copy2(src_path, dst_path)
+
+
+@pod.command()
+def open():
+    """ Open Pod folder in a file explorer or the like.
+    """
+    click.launch(environ.pod_dir())

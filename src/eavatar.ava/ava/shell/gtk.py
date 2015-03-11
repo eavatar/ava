@@ -31,7 +31,7 @@ class StatusIcon(object):
     def menu_setup(self):
         self.menu = Gtk.Menu()
 
-        self.open_item = Gtk.MenuItem.new_with_label(u"Open UI")
+        self.open_item = Gtk.MenuItem.new_with_label(u"Open website")
         self.open_item.connect("activate", self.on_open_frame)
         self.open_item.show()
         self.open_folder = Gtk.MenuItem.new_with_label(u"Open Folder")
