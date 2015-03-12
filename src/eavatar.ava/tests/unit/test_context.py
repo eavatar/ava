@@ -3,7 +3,7 @@ from __future__ import print_function, division, absolute_import
 
 import unittest
 
-from ava.context import Context
+from ava.spi.context import Context
 
 
 class Receiver(object):

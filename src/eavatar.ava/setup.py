@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="ava",
-    version="0.1.1",
+    version="0.1.5",
     description="EAvatar Ava - A versatile agent.",
     # package_dir={'': ''},
     packages=find_packages(exclude=['tests']),
@@ -16,7 +16,7 @@ setup(
 
     entry_points={
         'console_scripts': [
-            'ava = avacli:main',
+            'ava = ava.main:main',
         ],
     },
 

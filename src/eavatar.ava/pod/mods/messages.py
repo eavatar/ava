@@ -3,7 +3,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 
 import logging
-from ava.webfront import post, request
+from ava.spi.webfront import post, request
 
 
 logger = logging.getLogger(__name__)

@@ -10,7 +10,7 @@ import glob
 import logging
 from importlib import import_module
 from ava.runtime import environ
-from ava.signals import MODULE_LOADED
+from ava.spi.signals import MODULE_LOADED
 
 logger = logging.getLogger(__name__)
 

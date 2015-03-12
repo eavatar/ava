@@ -12,10 +12,12 @@ import logging.config
 
 from click import group, command
 
-import ava.webfront
-import ava.context
-import ava.exceptions
-import ava.signals
+import ava
+from ava import spi
+import ava.spi.webfront
+import ava.spi.context
+import ava.spi.exceptions
+import ava.spi.signals
 
 import ava.core.data
 import ava.core.webfront

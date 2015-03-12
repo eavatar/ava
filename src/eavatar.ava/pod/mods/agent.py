@@ -6,7 +6,7 @@ Commands for controlling the agent process.
 
 import sys
 import gevent
-from ava.webfront import post
+from ava.spi.webfront import post
 
 
 def _restart():

@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import click
 
 from .cli import cli
-from ava.defines import VERSION_STRING
+from ava.spi.defines import VERSION_STRING
 
 
 @cli.command()

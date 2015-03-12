@@ -43,7 +43,7 @@ def Datafiles(*filenames, **kw):
 
 #shfile = Datafiles('pack/ava', '')
 
-a = Analysis([os.path.join(app_path,'avacli.py')],
+a = Analysis([os.path.join(app_path, 'avacli.py')],
              pathex=['src'],
              hiddenimports=hiddenimports,
              hookspath=None,

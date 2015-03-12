@@ -11,9 +11,9 @@ import logging
 
 import importlib
 
-from ava import context
-from ava.defines import INSTALLED_ENGINES
-from ava.signals import AGENT_STARTED, AGENT_STOPPING
+from ava.spi import context
+from ava.spi.defines import INSTALLED_ENGINES
+from ava.spi.signals import AGENT_STARTED, AGENT_STOPPING
 
 logger = logging.getLogger(__name__)
 
