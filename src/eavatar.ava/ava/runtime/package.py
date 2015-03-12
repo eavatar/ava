@@ -38,13 +38,8 @@ class PackageManager(object):
                 return
 
             for it in distributions:
-                enable_it = it in settings["packages"]
-
-                if enable_it:
-                    pkg_resources.working_set.add(it)
-                    logger.debug("package added: %s", it.project_name)
-                else:
-                    logger.debug("Package found but not added: %s", it.project_name)
+                pkg_resources.working_set.add(it)
+                logger.debug("package added: %s", it.project_name)
 
             logger.error("Couldn't load: %r", errors)        # display errors
         else:

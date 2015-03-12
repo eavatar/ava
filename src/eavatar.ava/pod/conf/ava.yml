@@ -4,11 +4,6 @@ webfront:
     listen_addr: 0.0.0.0
     secure_listen_port: 5443
 
-packages:
-    - eavatar.ext.sample
-    - eavatar.ext.sample3
-
-
 logging:
     version: 1
     ble_existing_loggers: False

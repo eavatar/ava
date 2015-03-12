@@ -18,6 +18,18 @@ def static_file(filepath, root=static_folder, mimetype='auto', download=False, c
     return _static_file(filepath, root=root, mimetype=mimetype, download=download, charset=charset)
 
 
+def swap_root_app(wsgiapp):
+    """ Swap the root WSGI application.
+
+    :param wsgiapp:
+    :return: the previous WSGI application.
+    """
+    from ava.core.webfront import dispatcher
+    old_app = dispatcher.app
+    dispatcher.app = wsgiapp
+
+    return old_app
+
 __all__ = [route, get, post, delete, put, request, response,
            static_file, static_folder, dispatcher, ]
 

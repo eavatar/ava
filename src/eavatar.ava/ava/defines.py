@@ -24,7 +24,6 @@ AGENT_INFO = {
 # activated engines
 
 INSTALLED_ENGINES = [
-    "ava.core.data:DataEngine",
     "ava.core.webfront:WebfrontEngine",
     "ava.core.extension:ExtensionEngine",
     "ava.core.module:ModuleEngine",
