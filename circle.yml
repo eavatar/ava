@@ -19,6 +19,9 @@ dependencies:
 
 test:
   override:
+    - sudo cp src/libs/libsodium.so.13.1.0 /usr/local/lib/
+    - sudo ln -s /usr/local/lib/libsodium.so.13.1.0 /usr/local/lib/libsodium.so.13
+    - sudo ln -s /usr/local/lib/libsodium.so.13.1.0 /usr/local/lib/libsodium.so
     - bin/py.test -vvv src/eavatar.ava/tests/unit/
     - bin/py.test -vvv src/eavatar.ava/tests/integration/
     - ./pack/build_cli_pkg.sh
