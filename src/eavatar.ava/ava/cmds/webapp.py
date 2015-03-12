@@ -4,11 +4,11 @@ from __future__ import (absolute_import, division,
 
 import click
 from .cli import cli
-
+from ava.runtime import settings
 
 @cli.command()
 @click.argument("app")
 def launch(app):
     """ Launch web application.
     """
-    click.launch('http://127.0.0.1:5000')
+    click.launch('http://127.0.0.1:%s' % settings['webfront']['listen_port'])

@@ -17,7 +17,7 @@ import itertools
 import glob
 
 from ava.shell import resource_path
-from ava.shell.base import ShellBase
+from ava.shell.base import ShellBase, STR_EXIT, STR_OPEN_WEBFRONT, STR_STATUS
 
 
 class MainFrame(object):
@@ -32,7 +32,7 @@ class MainFrame(object):
         window_class = win32gui.WNDCLASS()
         self.hinst = window_class.hInstance = win32gui.GetModuleHandle(None)
         window_class.lpszClassName = self.window_class_name
-        window_class.style = win32con.CS_VREDRAW | win32con.CS_HREDRAW;
+        window_class.style = win32con.CS_VREDRAW | win32con.CS_HREDRAW
         window_class.hCursor = win32gui.LoadCursor(0, win32con.IDC_ARROW)
         window_class.hbrBackground = win32con.COLOR_WINDOW
         window_class.lpfnWndProc = message_map  # could also specify a wndproc.
@@ -72,12 +72,12 @@ class StatusIcon(object):
     def __init__(self, s):
         self.shell = s
 
-        self.icons = itertools.cycle(glob.glob(resource_path('res/*.ico')))
-        self.hover_text = u"影化身 - 執行任務中"
+        self.icons = itertools.cycle(glob.glob(resource_path('pod/static/*.ico')))
+        self.hover_text =STR_STATUS
 
-        self.menu_options = ((u'顯示主視窗...', None, None, _ID_OPEN_FRAME),
+        self.menu_options = ((STR_OPEN_WEBFRONT, None, None, _ID_OPEN_FRAME),
                              ("-", None, None, 1025),
-                             (u'結束影化身', None, None, _ID_QUIT),)
+                             (STR_EXIT, None, None, _ID_QUIT),)
 
         self.icon = self.icons.next()
 

@@ -7,7 +7,7 @@ import AppKit
 from AppKit import *
 
 from ava.shell import resource_path
-from ava.shell.base import ShellBase
+from ava.shell.base import ShellBase, STR_EXIT, STR_STATUS, STR_OPEN_WEBFRONT
 
 
 logger = logging.getLogger(__name__)
@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 def applicationSupportFolder(self):
     paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory,NSUserDomainMask,True)
     basePath = (len(paths) > 0 and paths[0]) or NSTemporaryDirectory()
-    fullPath = basePath.stringByAppendingPathComponent_("EAvatar")
+    fullPath = basePath.stringByAppendingPathComponent_("Ava")
     if not os.path.exists(fullPath):
         os.mkdir(fullPath)
     return fullPath
@@ -41,10 +41,10 @@ class AppDelegate(NSObject):
     def applicationDidFinishLaunching_(self, sender):
     	logger.debug("Application did finish launching.")
 
-        logger.debug("Icon file: %s", resource_path('res/eavatar.png'))
+        logger.debug("Icon file: %s", resource_path('pod/static/eavatar.png'))
         statusbar = NSStatusBar.systemStatusBar()
         self.statusitem = statusbar.statusItemWithLength_(NSVariableStatusItemLength)
-        self.icon = NSImage.alloc().initByReferencingFile_(resource_path('res/eavatar.png'))
+        self.icon = NSImage.alloc().initByReferencingFile_(resource_path('pod/static/eavatar.png'))
         self.icon.setScalesWhenResized_(True)
         self.icon.setSize_((20, 20))
         self.statusitem.setImage_(self.icon)
@@ -55,19 +55,18 @@ class AppDelegate(NSObject):
         #make the menu
         self.menubarMenu = NSMenu.alloc().init()
 
-        self.menuItem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(u'開啓主畫面...', 'openMainFrame:', '')
+        self.menuItem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(STR_OPEN_WEBFRONT, 'openMainFrame:', '')
         self.menubarMenu.addItem_(self.menuItem)
 
         self.menuItem = NSMenuItem.separatorItem()
         self.menubarMenu.addItem_(self.menuItem)
 
-        #self.quit = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(u'結束影化身', 'onQuitApp:', '')
-        self.quit = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(u'結束影化身', 'terminate:', '')
+        self.quit = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(STR_EXIT, 'terminate:', '')
         self.menubarMenu.addItem_(self.quit)
 
         #add menu to statusitem
         self.statusitem.setMenu_(self.menubarMenu)
-        self.statusitem.setToolTip_(u'影化身 - 任務執行中')
+        self.statusitem.setToolTip_(u'Ava - running')
 
     def applicationWillTerminate_(self,sender):
         logger.debug("Application will terminate.")

@@ -8,6 +8,9 @@ from abc import ABCMeta, abstractmethod
 
 from ava.runtime import settings
 
+STR_STATUS = 'Ava - running...'
+STR_OPEN_WEBFRONT = u'Open Webfront'
+STR_EXIT = u'Exit Ava'
 
 logger = logging.getLogger(__name__)
 

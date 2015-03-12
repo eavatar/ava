@@ -5,7 +5,7 @@ import time
 
 from gi.repository import Gtk
 from gi.repository import AppIndicator3 as appindicator
-from ava.shell.base import ShellBase
+from ava.shell.base import ShellBase, STR_OPEN_WEBFRONT, STR_EXIT
 from ava.shell import resource_path
 from ava.runtime import environ
 
@@ -31,18 +31,14 @@ class StatusIcon(object):
     def menu_setup(self):
         self.menu = Gtk.Menu()
 
-        self.open_item = Gtk.MenuItem.new_with_label(u"Open website")
+        self.open_item = Gtk.MenuItem.new_with_label(STR_OPEN_WEBFRONT)
         self.open_item.connect("activate", self.on_open_frame)
         self.open_item.show()
-        self.open_folder = Gtk.MenuItem.new_with_label(u"Open Folder")
-        self.open_folder.connect("activate", self.on_open_folder)
-        self.open_folder.show()
-        self.quit_item = Gtk.MenuItem.new_with_label(u"Exit Ava")
+        self.quit_item = Gtk.MenuItem.new_with_label(STR_EXIT)
         self.quit_item.connect("activate", self.quit)
         self.quit_item.show()
 
         self.menu.append(self.open_item)
-        self.menu.append(self.open_folder)
         self.menu.append(Gtk.SeparatorMenuItem.new())
         self.menu.append(self.quit_item)
 
