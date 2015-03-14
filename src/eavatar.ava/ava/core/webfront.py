@@ -6,7 +6,7 @@ import logging
 
 import gevent
 import bottle
-from gevent import pywsgi
+from ws4py.server.geventserver import WSGIServer
 from ava.runtime import settings
 from ava.runtime import environ
 
@@ -81,7 +81,6 @@ class WebfrontEngine(object):
         if self.secure_listen_port != 0:
             ctx.add_child_greenlet(gevent.spawn(self._run_https))
 
-
         logger.debug("Webfront engine started.")
 
     def stop(self, ctx=None):
@@ -94,22 +93,25 @@ class WebfrontEngine(object):
         keyfile = os.path.join(conf_dir, 'ava.key')
         certfile = os.path.join(conf_dir, 'ava.crt')
 
-        self._https_listener = pywsgi.WSGIServer((self.listen_addr, self.secure_listen_port),
-                                                dispatcher,
-                                                keyfile=keyfile,
-                                                certfile=certfile)
+        self._https_listener = WSGIServer(
+            (self.listen_addr, self.secure_listen_port),
+            dispatcher,
+            keyfile=keyfile,
+            certfile=certfile)
 
-        logger.debug("Webfront engine(HTTPS) is listening on port: %d", self._https_listener.address[1])
+        logger.debug("Webfront engine(HTTPS) is listening on port: %d",
+                     self._https_listener.address[1])
 
         self._https_listener.serve_forever()
 
     def _run_http(self):
         logger.debug("Webfront engine(HTTP) is running...")
 
+        self._http_listener = WSGIServer(
+            (self.listen_addr, self.listen_port),
+            dispatcher)
 
-        self._http_listener = pywsgi.WSGIServer((self.listen_addr, self.listen_port),
-                                                dispatcher)
-
-        logger.debug("Webfront engine(HTTP) is listening on port: %d", self._http_listener.address[1])
+        logger.debug("Webfront engine(HTTP) is listening on port: %d",
+                     self._http_listener.address[1])
 
         self._http_listener.serve_forever()

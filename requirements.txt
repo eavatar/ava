@@ -1,3 +1,4 @@
+backports.ssl-match-hostname==3.4.0.2
 base58==0.2.1
 bottle==0.12.8
 click==3.3
@@ -11,3 +12,7 @@ PyYAML==3.11
 pyscrypt==1.6.2
 requests==2.4.3
 six==1.9.0
+ujson==1.33
+ws4py==0.3.4
+wsaccel==0.6.2
+
