@@ -2,6 +2,10 @@ machine:
   services:
   - docker
 
+general:
+  artifacts:
+    - "dist/ava"
+
 checkout:
   post:
   - git submodule sync

@@ -23,4 +23,5 @@ import ava.core.data
 import ava.core.webfront
 import ava.core.extension
 import ava.core.module
+import ava.core.websocket
 import ava.runtime
