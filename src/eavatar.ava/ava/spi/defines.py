@@ -27,7 +27,7 @@ INSTALLED_ENGINES = [
     "ava.core.webfront:WebfrontEngine",
     "ava.core.extension:ExtensionEngine",
     "ava.core.module:ModuleEngine",
-    "ava.core.websocket:WebsocketEngine"
+    "ava.core.websocket:WebsocketEngine",
 ]
 
 

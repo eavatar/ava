@@ -12,6 +12,9 @@ import logging.config
 
 from click import group, command
 
+import ws4py
+from ws4py.server import geventserver
+
 import ava
 from ava import spi
 import ava.spi.webfront

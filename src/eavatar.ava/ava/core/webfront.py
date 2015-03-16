@@ -26,6 +26,7 @@ class ApplicationDispatcher(object):
 
     def __call__(self, environ, start_response):
         script = environ.get(b'PATH_INFO', b'')
+        # logger.debug("initial script: %s", script)
         path_info = ''
         while b'/' in script:
             if script in self.mounts:
@@ -34,16 +35,19 @@ class ApplicationDispatcher(object):
             script, last_item = script.rsplit(b'/', 1)
             path_info = b'/%s%s' % (last_item, path_info)
         else:
+            # logger.debug("Selected script: %s", script)
             app = self.mounts.get(script, self.app)
         original_script_name = environ.get(b'SCRIPT_NAME', b'')
         environ[b'SCRIPT_NAME'] = original_script_name + script
         environ[b'PATH_INFO'] = path_info
         return app(environ, start_response)
 
-    def attach_app(self, path, app):
+    def mount(self, path, app):
+        logger.debug("Mounting app at %s", path)
         self.mounts[path] = app
 
-    def detach_app(self, path):
+    def unmount(self, path):
+        logger.debug("Unmounting app at %s", path)
         app = self.mounts.get(path)
         if app is not None:
             del self.mounts[path]

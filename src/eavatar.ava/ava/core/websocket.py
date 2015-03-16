@@ -14,7 +14,7 @@ class WebSocketHandler(EchoWebSocket):
 
 class WebsocketEngine(object):
     def start(self, ctx=None):
-        dispatcher.attach_app('/ws', WebSocketWSGIApplication(
+        dispatcher.mount('/ws', WebSocketWSGIApplication(
             handler_cls=WebSocketHandler))
 
     def stop(self, ctx=None):

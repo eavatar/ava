@@ -23,3 +23,15 @@ class WebsocketTest(unittest.TestCase):
         print("Received: {}".format(result))
         ws.close()
         self.assertEqual("Hello, World", str(result))
+
+    def test_secure_websocket_connection(self):
+        ws = WebSocketClient('wss://127.0.0.1:5443/ws')
+        ws.connect()
+        print("Sending: 'Hello, World'...")
+        ws.send("Hello, World")
+        print("Sent")
+        print("Receiving...")
+        result = ws.receive()
+        print("Received: {}".format(result))
+        ws.close()
+        self.assertEqual("Hello, World", str(result))

@@ -6,6 +6,7 @@ import click
 from .cli import cli
 from ava.runtime import settings
 
+
 @cli.command()
 @click.argument("app")
 def launch(app):
