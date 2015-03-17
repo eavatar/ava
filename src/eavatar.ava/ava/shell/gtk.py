@@ -15,9 +15,9 @@ class StatusIcon(object):
     def __init__(self, shell):
         self.shell = shell
         self.ind = appindicator.Indicator.new("Ava-indicator",
-                                           resource_path("pod/static/eavatar.png"),
+                                           resource_path("res/eavatar.png"),
                                            appindicator.IndicatorCategory.APPLICATION_STATUS)
-        self.ind.set_icon_theme_path(resource_path('pod/static/'))
+        self.ind.set_icon_theme_path(resource_path('res/'))
 
         #self.ind = appindicator.Indicator.new_with_path ("EAvatar-indicator", "eavatar.png",
         #        appindicator.IndicatorCategory.APPLICATION_STATUS,

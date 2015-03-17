@@ -72,7 +72,7 @@ class StatusIcon(object):
     def __init__(self, s):
         self.shell = s
 
-        self.icons = itertools.cycle(glob.glob(resource_path('pod/static/*.ico')))
+        self.icons = itertools.cycle(glob.glob(resource_path('res/*.ico')))
         self.hover_text =STR_STATUS
 
         self.menu_options = ((STR_OPEN_WEBFRONT, None, None, _ID_OPEN_FRAME),

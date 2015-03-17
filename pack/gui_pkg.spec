@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 app_path = os.path.join('src', 'eavatar.ava')
-app_icon = os.path.join(app_path, 'pod/static/eavatar.icns')
+res_path = os.path.join(app_path, 'res')
+app_icon = os.path.join(res_path, 'eavatar.icns')
 
 exe_name = 'avaw'
 hiddenimports = []
@@ -13,7 +14,7 @@ console = False
 
 if sys.platform == 'win32':
     exe_name = 'avaw.exe'
-    app_icon = os.path.join(app_path, 'pod', 'static', 'eavatar.ico')
+    app_icon = os.path.join(res_path, 'eavatar.ico')
     ext_name = '.win'
 elif sys.platform.startswith('linux'):
     ext_name = '.lin'
@@ -64,7 +65,7 @@ exe = EXE(pyz,
           debug=False,
           strip=run_strip,
           upx=run_upx,
-          icon= os.path.join(app_path, 'pod/static/eavatar.ico'),
+          icon= os.path.join(res_path, 'eavatar.ico'),
           console=console )
 
 
@@ -72,6 +73,7 @@ coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,
                Tree(os.path.join(app_path, 'pod'), 'pod', excludes=['*.pyc']),
+               Tree(res_path, 'res', excludes=['*.pyc']),
                a.datas,
 #               shfile,
                strip=run_strip,
@@ -82,4 +84,4 @@ if sys.platform.startswith('darwin'):
     app = BUNDLE(coll,
                 name='Ava.app',
                 appname='ava',
-                icon=os.path.join(app_path, 'pod', 'static', 'eavatar.icns'))
+                icon=os.path.join(res_path, 'eavatar.icns'))

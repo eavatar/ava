@@ -45,12 +45,15 @@ class ApplicationDispatcher(object):
     def mount(self, path, app):
         logger.debug("Mounting app at %s", path)
         self.mounts[path] = app
+        return app
 
     def unmount(self, path):
         logger.debug("Unmounting app at %s", path)
         app = self.mounts.get(path)
         if app is not None:
             del self.mounts[path]
+            return app
+        return None
 
 # the global web application
 dispatcher = ApplicationDispatcher(bottle.app())

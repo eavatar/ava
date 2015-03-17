@@ -21,7 +21,7 @@ from ava.core.webfront import dispatcher
 logger = logging.getLogger(__name__)
 
 
-static_folder = os.path.join(environ.pod_dir(), 'static')
+static_folder = os.path.join(environ.pod_dir(), 'webroot')
 
 
 def _raise_unauthorized(desc=b'Authentication required.'):

@@ -41,10 +41,10 @@ class AppDelegate(NSObject):
     def applicationDidFinishLaunching_(self, sender):
     	logger.debug("Application did finish launching.")
 
-        logger.debug("Icon file: %s", resource_path('pod/static/eavatar.png'))
+        logger.debug("Icon file: %s", resource_path('ava/res/eavatar.png'))
         statusbar = NSStatusBar.systemStatusBar()
         self.statusitem = statusbar.statusItemWithLength_(NSVariableStatusItemLength)
-        self.icon = NSImage.alloc().initByReferencingFile_(resource_path('pod/static/eavatar.png'))
+        self.icon = NSImage.alloc().initByReferencingFile_(resource_path('res/eavatar.png'))
         self.icon.setScalesWhenResized_(True)
         self.icon.setSize_((20, 20))
         self.statusitem.setImage_(self.icon)

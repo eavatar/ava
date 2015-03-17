@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="ava",
-    version="0.1.8",
+    version="0.1.9",
     description="EAvatar Ava - A versatile agent.",
     # package_dir={'': ''},
     packages=find_packages(exclude=['tests']),
@@ -20,7 +20,8 @@ setup(
                       'PyDispatcher',
                       'PyYAML',
                       'pyscrypt',
-                      'requests'],
+                      'requests',
+                      'ws4py'],
     test_suite='nose.collector',
     zip_safe=False,
 
