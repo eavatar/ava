@@ -9,6 +9,7 @@ import lmdb
 import gevent
 import logging
 import logging.config
+import msgpack
 
 from click import group, command
 

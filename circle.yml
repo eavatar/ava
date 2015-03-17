@@ -28,10 +28,9 @@ test:
     - sudo ln -s /usr/local/lib/libsodium.so.13.1.0 /usr/local/lib/libsodium.so
     - bin/py.test -vvv src/eavatar.ava/tests/unit/
     - bin/py.test -vvv src/eavatar.ava/tests/integration/
+    - bin/py.test -vvv src/eavatar.ava/tests/functional/
     - ./pack/build_cli_pkg.sh
     - cp src/libs/libsodium.so.13.1.0 dist/ava/libsodium.so
-    - docker-compose up -d ; sleep 5
-    - bin/py.test -vvv src/eavatar.ava/tests/functional/
 
 deployment:
   hub:

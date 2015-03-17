@@ -6,7 +6,11 @@ Commands for controlling the agent process.
 
 import sys
 import gevent
-from ava.spi.webfront import post
+import bottle
+from ava.spi.webfront import dispatcher, check_authentication
+
+api = dispatcher.mount(b'agent', bottle.Bottle())
+api.add_hook('before_request', check_authentication)
 
 
 def _restart():
@@ -16,10 +20,14 @@ def _restart():
     sys.exit(1)
 
 
-@post("/api/agent/restart")
+@api.post("/restart")
 def restart():
     gevent.spawn_later(3, _restart)
-    return "Ava is restarting..."
+    return "Agent is restarting..."
 
+
+@api.get("/status")
+def status():
+    return "Agent is running..."
 
 

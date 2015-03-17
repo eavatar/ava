@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="ava",
-    version="0.1.9",
+    version="0.1.10",
     description="EAvatar Ava - A versatile agent.",
     # package_dir={'': ''},
     packages=find_packages(exclude=['tests']),
@@ -16,6 +16,7 @@ setup(
                       'gevent',
                       'libnacl',
                       'lmdb',
+                      'msgpack-python',
                       'pycrypto',
                       'PyDispatcher',
                       'PyYAML',

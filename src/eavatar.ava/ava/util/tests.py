@@ -9,7 +9,7 @@ from ava.core.agent import Agent
 
 class AgentTest(unittest.TestCase):
     """
-    For functional/integration tests which require a running agent.
+    For functional tests which require a running agent.
     """
     agent = None
 
@@ -17,6 +17,8 @@ class AgentTest(unittest.TestCase):
     def setUpClass(cls):
         AgentTest.agent = Agent()
         agent_greenlet = gevent.spawn(AgentTest.agent.run)
+        while not AgentTest.agent.running:
+            gevent.sleep(0.5)
 
     @classmethod
     def tearDownClass(cls):
