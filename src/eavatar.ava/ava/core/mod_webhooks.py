@@ -14,10 +14,10 @@ from ava.spi.signals import MODULE_LOADED
 
 logger = logging.getLogger(__name__)
 
-_MODULES_DIR = 'mods'
+_MODULES_DIR = os.path.join('mods', 'webhooks')
 
 # the package name for modules.
-_MODULE_PKG = 'mods.'
+_MODULE_PKG = 'mods.webhooks.'
 
 
 class ModuleInfo(object):
@@ -39,7 +39,7 @@ class ModuleInfo(object):
         self._mod = mod
 
 
-class ModuleEngine(object):
+class WebhooksEngine(object):
     """
     Responsible for managing application modules.
     """

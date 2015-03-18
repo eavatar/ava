@@ -4,11 +4,8 @@ Various definitions used across different packages.
 """
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from ava import VERSION_MAJOR, VERSION_MINOR, VERSION_MICRO, VERSION_STRING
 
-VERSION_STRING = "0.1.0"
-VERSION_MAJOR = 0
-VERSION_MINOR = 1
-VERSION_MICRO = 0
 
 # return as the root resource.
 AGENT_INFO = {
@@ -26,7 +23,7 @@ AGENT_INFO = {
 INSTALLED_ENGINES = [
     "ava.core.webfront:WebfrontEngine",
     "ava.core.extension:ExtensionEngine",
-    "ava.core.module:ModuleEngine",
+    "ava.core.mod_webhooks:WebhooksEngine",
 #    "ava.core.websocket:WebsocketEngine",
 ]
 

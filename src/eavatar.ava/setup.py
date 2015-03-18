@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from setuptools import setup, find_packages
+from ava import __version__
 
 setup(
     name="ava",
-    version="0.1.10",
+    version=__version__,
     description="EAvatar Ava - A versatile agent.",
     # package_dir={'': ''},
     packages=find_packages(exclude=['tests']),
