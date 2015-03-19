@@ -9,7 +9,7 @@ from .cli import cli
 
 
 def gen_random_key(ctx):
-    if ctx.obj['verbose']:
+    if ctx.obj['verbosity']:
         click.echo("Generating random key...")
     (pk, sk) = keyutil.generate_keypair()
     xid = keyutil.key_to_xid(pk)
@@ -22,10 +22,10 @@ def gen_random_key(ctx):
 
 @cli.group()
 @click.pass_context
-def key(ctx, verbose):
+def key(ctx):
     """ Key management
     """
-    ctx.obj = dict(verbose=verbose)
+    pass
 
 
 @key.command()
@@ -34,7 +34,7 @@ def key(ctx, verbose):
 @click.option('--password', '-p',
               help='Hard to guess password.')
 @click.pass_context
-def generate(ctx, salt, password):
+def generate(ctx, salt=None, password=None):
     """ Generate random key or derive from salt and password.
 
     """

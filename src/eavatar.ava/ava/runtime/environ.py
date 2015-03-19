@@ -15,6 +15,7 @@ DATA_DIR_NAME = u'data'
 CONF_DIR_NAME = u'conf'
 MODS_DIR_NAME = u'mods'
 
+
 class Environment(object):
     """
     Encapsulates the runtime environment.

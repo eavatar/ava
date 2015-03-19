@@ -5,14 +5,16 @@ import gevent
 from gevent import monkey
 monkey.patch_all()
 
+import os
 import sys
 import signal
 import logging
-
 import importlib
+from ava.util import crypto
+from ava.runtime import settings
 
 from ava.spi import context
-from ava.spi.defines import INSTALLED_ENGINES
+from ava.spi.defines import INSTALLED_ENGINES, AVA_SECRET_KEY, AVA_OWNER_XID
 from ava.spi.signals import AGENT_STARTED, AGENT_STOPPING
 
 logger = logging.getLogger(__name__)
@@ -77,8 +79,35 @@ class Agent(object):
         self._greenlets = []
         self._context = context.instance(self)
         self._engines = []
+        self.__secret = None
+        self.owner_xid = None
+
+        self.get_security_keys()
+
         if hasattr(signal, 'SIGHUP'):
             signal.signal(signal.SIGHUP, signal_handler)
+
+    def get_security_keys(self):
+        self.__secret = os.environ.get(AVA_SECRET_KEY)
+        self.owner_xid = os.environ.get(AVA_OWNER_XID)
+
+        if self.__secret is None and not settings['debug']:
+            logger.error('No agent secret is specified!')
+            raise SystemExit(2)
+
+        if self.owner_xid is None and not settings['debug']:
+            logger.error(("No user XID is specified!"))
+            raise SystemExit(2)
+
+        if self.__secret:
+            self.__secret = crypto.string_to_secret(self.__secret)
+        elif settings['debug']:
+            pk, sk = crypto.generate_keypair()
+            self.__secret = sk
+
+        if not self.owner_xid and settings['debug']:
+            self.owner_xid = \
+                b'AYPwK3c3VK7ZdBvKfcbV5EmmCZ8zSb9viZ288gKFBFuE92jE'
 
     def add_child_greenlet(self, child):
         self._greenlets.append(child)
