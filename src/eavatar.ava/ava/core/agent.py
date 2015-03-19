@@ -99,8 +99,8 @@ class Agent(object):
         keyfile = os.path.join(environ.conf_dir(), KEYFILE)
         keys = config.load_conf(keyfile)
 
-        self.__secret = keys['secret']
-        self.user_xid = keys['user']
+        self.__secret = keys.get('secret')
+        self.user_xid = keys.get('user')
         self.__secret = os.environ.get(AVA_AGENT_SECRET, self.__secret)
         self.user_xid = os.environ.get(AVA_USER_XID, self.user_xid)
 
