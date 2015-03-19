@@ -6,7 +6,7 @@ import os
 import unittest
 import gevent
 
-from ava.spi.defines import AVA_OWNER_XID, AVA_SECRET_KEY
+from ava.spi.defines import AVA_USER_XID, AVA_AGENT_SECRET
 from ava.runtime import settings
 from ava.core.agent import Agent
 
@@ -25,8 +25,8 @@ class AgentTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         settings['debug'] = True
-        os.environ.setdefault(AVA_OWNER_XID, cls.user_xid)
-        os.environ.setdefault(AVA_SECRET_KEY, cls.agent_secret)
+        os.environ.setdefault(AVA_USER_XID, cls.user_xid)
+        os.environ.setdefault(AVA_AGENT_SECRET, cls.agent_secret)
         AgentTest.agent = Agent()
         agent_greenlet = gevent.spawn(AgentTest.agent.run)
         while not AgentTest.agent.running:

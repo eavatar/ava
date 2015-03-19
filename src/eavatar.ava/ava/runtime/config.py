@@ -12,7 +12,7 @@ import logging.config
 import os.path
 from bottle import template
 
-from yaml import load
+from yaml import load, dump
 
 try:
     from yaml import CLoader as Loader, CDumper as Dumper
@@ -36,10 +36,17 @@ settings = dict(base_dir=environ.base_dir(),
 
 
 def load_conf(conf_file):
+    if not os.path.exists(conf_file):
+        return {}
 
     data = codecs.open(conf_file, 'rb', encoding='utf-8').read()
     data = template(data, **settings)
     return load(data, Loader=Loader)
+
+
+def save_conf(conf_file, content):
+    out = codecs.open(conf_file, 'wb', encoding='utf-8')
+    out.write(dump(content, Dumper=Dumper))
 
 settings.update(load_conf(AGENT_CONF))
 

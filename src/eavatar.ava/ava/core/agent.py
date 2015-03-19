@@ -10,12 +10,17 @@ import sys
 import signal
 import logging
 import importlib
+
 from ava.util import crypto
 from ava.runtime import settings
+from ava.runtime import environ
+from ava.runtime import config
 
 from ava.spi import context
-from ava.spi.defines import INSTALLED_ENGINES, AVA_SECRET_KEY, AVA_OWNER_XID
+from ava.spi.defines import INSTALLED_ENGINES, AVA_AGENT_SECRET, AVA_USER_XID
 from ava.spi.signals import AGENT_STARTED, AGENT_STOPPING
+
+KEYFILE = 'ava-keys.yml'
 
 logger = logging.getLogger(__name__)
 
@@ -80,34 +85,57 @@ class Agent(object):
         self._context = context.instance(self)
         self._engines = []
         self.__secret = None
-        self.owner_xid = None
+        self.xid = None
+        self.key = None
+        self.user_xid = None
 
         self.get_security_keys()
+        self.save_keys()
 
         if hasattr(signal, 'SIGHUP'):
             signal.signal(signal.SIGHUP, signal_handler)
 
     def get_security_keys(self):
-        self.__secret = os.environ.get(AVA_SECRET_KEY)
-        self.owner_xid = os.environ.get(AVA_OWNER_XID)
+        keyfile = os.path.join(environ.conf_dir(), KEYFILE)
+        keys = config.load_conf(keyfile)
 
-        if self.__secret is None and not settings['debug']:
-            logger.error('No agent secret is specified!')
-            raise SystemExit(2)
+        self.__secret = keys['secret']
+        self.user_xid = keys['user']
+        self.__secret = os.environ.get(AVA_AGENT_SECRET, self.__secret)
+        self.user_xid = os.environ.get(AVA_USER_XID, self.user_xid)
 
-        if self.owner_xid is None and not settings['debug']:
-            logger.error(("No user XID is specified!"))
+        if self.user_xid is None and not settings['debug']:
+            logger.error('No User XID is specified!')
             raise SystemExit(2)
 
         if self.__secret:
             self.__secret = crypto.string_to_secret(self.__secret)
-        elif settings['debug']:
+            pk, sk = crypto.generate_keypair(sk=self.__secret)
+            self.key = pk
+        else:
+            logger.debug("No secret key is given, generating one...")
             pk, sk = crypto.generate_keypair()
             self.__secret = sk
+            self.key = pk
 
-        if not self.owner_xid and settings['debug']:
-            self.owner_xid = \
+        self.xid = crypto.key_to_xid(self.key)
+        logger.debug("The agent's XID: %s", self.xid)
+
+        if not self.user_xid and settings['debug']:
+            logger.debug("User XID not given via environment variable. " +
+                         "Generating one...")
+            self.user_xid = \
                 b'AYPwK3c3VK7ZdBvKfcbV5EmmCZ8zSb9viZ288gKFBFuE92jE'
+        logger.debug("The agent's user XID: %s", self.user_xid)
+
+    def save_keys(self):
+        keyfile = os.path.join(environ.conf_dir(), KEYFILE)
+        keys = {
+            b'secret': crypto.secret_to_string(self.__secret),
+            b'user': self.user_xid,
+        }
+
+        config.save_conf(keyfile, keys)
 
     def add_child_greenlet(self, child):
         self._greenlets.append(child)

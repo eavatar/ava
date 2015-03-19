@@ -74,3 +74,4 @@ waf-*
 .DS_Store
 src/eavatar.ava/dist
 src/eavatar.ava/build
+src/eavatar.ava/pod/conf/ava-keys.yml

@@ -29,9 +29,9 @@ INSTALLED_ENGINES = [
 
 
 ##### Environment variable ####
-AVA_HOME = 'AVA_HOME'  # where the working directory.
-AVA_SECRET_KEY = 'AVA_SECRET_KEY'  # secret key for this agent.
-AVA_OWNER_XID = 'AVA_OWNER_XID'  # the owner's public key.
+AVA_POD_FOLDER = 'AVA_POD'  # where the working directory.
+AVA_AGENT_SECRET = 'AVA_AGENT_SECRET'  # secret key for this agent.
+AVA_USER_XID = 'AVA_USER_XID'  # the owner's public key.
 
 
 # tries to import definitions from the global settings.

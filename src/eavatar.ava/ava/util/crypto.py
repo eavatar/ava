@@ -5,7 +5,8 @@ import six
 import hashlib
 import pyscrypt
 import base58
-from Crypto.Hash import RIPEMD
+import hashlib
+#from Crypto.Hash import RIPEMD
 import libnacl.public
 import libnacl.secret
 
@@ -128,7 +129,9 @@ def key_to_fingerprint(key):
 
     #assert len(key_hash) == 32
 
-    ripemd = RIPEMD.new(key_hash)
+
+    ripemd = hashlib.new('ripemd')
+    ripemd.update(key_hash)
     key_hash = ripemd.digest()
 
     #assert len(key_hash) == 20
