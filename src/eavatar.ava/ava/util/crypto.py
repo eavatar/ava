@@ -183,7 +183,8 @@ def key_to_peer_id(key):
 
     #assert len(key_hash) == 32
 
-    ripemd = RIPEMD.new(key_hash)
+    ripemd = hashlib.new('ripemd')
+    ripemd.update(key_hash)
     return ripemd.digest()
 
 
@@ -258,9 +259,6 @@ def secret_key_to_xid(sk):
     :param sk:
     :return:
     """
-    if isinstance(sk, six.string_types):
-        sk = string_to_secret(sk)
-
     keyobj = libnacl.public.SecretKey(sk=sk)
     pk = keyobj.pk
     return key_to_xid(pk)

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-
+import os
 import logging
 import click
 
@@ -25,6 +25,14 @@ def cli(ctx, verbose):
         log_level = logging.INFO
 
     logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s - %(message)s', level=log_level, disable_existing_loggers=False)
+
+    app_dir = click.get_app_dir('.ava')
+    if not os.path.exists(app_dir):
+        os.mkdir(app_dir, 0700)
+    if verbose > 2:
+        click.echo("Location for configuration files: %s" % app_dir)
+
+    ctx.obj['app_dir'] = app_dir
 
     if ctx.invoked_subcommand is None:
         from .agent import run

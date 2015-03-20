@@ -40,13 +40,17 @@ def load_conf(conf_file):
         return {}
 
     data = codecs.open(conf_file, 'rb', encoding='utf-8').read()
+    if len(data.strip()) == 0:
+        return {}
+
     data = template(data, **settings)
     return load(data, Loader=Loader)
 
 
 def save_conf(conf_file, content):
     out = codecs.open(conf_file, 'wb', encoding='utf-8')
-    out.write(dump(content, Dumper=Dumper))
+    out.write(dump(content, Dumper=Dumper, default_flow_style=False,
+                   indent=4, width=80))
 
 settings.update(load_conf(AGENT_CONF))
 
