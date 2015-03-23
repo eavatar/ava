@@ -4,7 +4,7 @@ machine:
 
 general:
   artifacts:
-    - "dist/ava"
+    - "dist/ava-linux"
 
 checkout:
   post:
@@ -30,7 +30,7 @@ test:
     - bin/py.test -vvv src/eavatar.ava/tests/integration/
     - bin/py.test -vvv src/eavatar.ava/tests/functional/
     - ./pack/build_cli_pkg.sh
-    - cp src/libs/libsodium.so.13.1.0 dist/ava/libsodium.so
+    - cp src/libs/libsodium.so.13.1.0 dist/ava-linux/libsodium.so
 
 deployment:
   hub:
