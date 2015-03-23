@@ -52,7 +52,6 @@ def user(ctx, email, password, force=False):
     content = {}
     secret = crypto.derive_secret_key(password=password.encode('utf-8'),
                                       salt=email.encode('utf-8'))
-    content[b'secret'] = crypto.secret_to_string(secret)
     content[b'xid'] = crypto.secret_key_to_xid(secret)
     content[b'email'] = email
 

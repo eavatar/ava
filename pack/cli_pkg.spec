@@ -7,21 +7,20 @@ res_path = os.path.join(app_path, 'res')
 
 exe_name = 'ava'
 hiddenimports = []
-run_strip = True
+run_strip = False
+run_upx = False
+
 
 if sys.platform.startswith('win32'):
     exe_name = 'ava.exe'
     app_icon = os.path.join(res_path, 'eavatar.ico')
-    ext_name = '.win'
+    plat_name = 'ava-win32'
     run_strip = False
-    hiddenimports.append('depends_win32.py')
 elif sys.platform.startswith('linux'):
-    ext_name = '.lin'
+    plat_name = 'ava-linux'
     run_strip = True
-    hiddenimports.append('depends_linux.py')
 elif sys.platform.startswith('darwin'):
-    ext_name = '.mac'
-    hiddenimports.append('depends_osx.py')
+    plat_name = 'ava-osx'
 else:
     ext_name = ''
 
@@ -45,14 +44,11 @@ def Datafiles(*filenames, **kw):
 #shfile = Datafiles('pack/ava', '')
 
 a = Analysis([os.path.join(app_path, 'avacli.py')],
-             pathex=['src'],
+             pathex=[app_path],
              hiddenimports=hiddenimports,
              hookspath=None,
              runtime_hooks=None,
              excludes=['PyQt4', 'wx', 'django', 'Tkinter', 'gi.repository', 'objc', 'AppKit', 'Foundation'])
-
-run_strip = False
-run_upx = False
 
 pyz = PYZ(a.pure)
 exe = EXE(pyz,
@@ -76,5 +72,5 @@ coll = COLLECT(exe,
 #               shfile,
                strip=run_strip,
                upx=run_upx,
-               name=os.path.join('dist', 'ava'))
+               name=os.path.join('dist', plat_name))
 

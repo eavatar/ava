@@ -9,18 +9,20 @@ exe_name = 'avaw'
 hiddenimports = []
 
 run_strip = False
-run_upx = True
+run_upx = False
 console = False
+
 
 if sys.platform == 'win32':
     exe_name = 'avaw.exe'
     app_icon = os.path.join(res_path, 'eavatar.ico')
-    ext_name = '.win'
+    plat_name = 'ava-win32'
 elif sys.platform.startswith('linux'):
     ext_name = '.lin'
     run_strip = True
+    plat_name = 'ava-linux'
 elif sys.platform.startswith('darwin'):
-    ext_name = '.mac'
+    plat_name = 'ava-osx'
     run_upx = False
     # to hide the dock icon.
     console = True
@@ -53,9 +55,6 @@ a = Analysis([os.path.join(app_path,'avagui.py')],
              runtime_hooks=None,
              excludes=['PyQt4', 'wx', 'django', 'Tkinter', 'objc', 'AppKit', 'Foundation'])
 
-run_strip = False
-run_upx = False
-
 pyz = PYZ(a.pure)
 exe = EXE(pyz,
           a.scripts,
@@ -78,7 +77,7 @@ coll = COLLECT(exe,
 #               shfile,
                strip=run_strip,
                upx=run_upx,
-               name=os.path.join('dist', 'ava'))
+               name=os.path.join('dist', plat_name))
 
 if sys.platform.startswith('darwin'):
     app = BUNDLE(coll,

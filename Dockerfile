@@ -1,7 +1,7 @@
 FROM eavatar/basebox
 MAINTAINER sampot <sam@eavatar.com>
 
-ADD dist/ava /ava
+ADD dist/ava-linux /ava
 RUN chown -R ava:ava /ava
 EXPOSE 5080 5443
 # ENTRYPOINT ["/ava/ava"]
