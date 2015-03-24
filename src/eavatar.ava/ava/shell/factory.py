@@ -12,7 +12,7 @@ def create():
     """
     plat = sys.platform
     if plat.startswith("win32"):
-        from ava.shell.wx import Shell
+        from ava.shell.win32 import Shell
     elif plat.startswith("darwin"):
         from ava.shell.osx import Shell
     elif plat.startswith("linux"):

@@ -1,6 +1,8 @@
 # -*- mode: python -*-
 # -*- coding: utf-8 -*-
 
+import sys
+lib_path = os.path.join('src', 'libs')
 app_path = os.path.join('src', 'eavatar.ava')
 res_path = os.path.join(app_path, 'res')
 app_icon = os.path.join(res_path, 'eavatar.icns')
@@ -11,23 +13,32 @@ hiddenimports = []
 run_strip = False
 run_upx = False
 console = False
-
+app_name = 'avagui.py'
+extra_binaries = []
 
 if sys.platform == 'win32':
     exe_name = 'avaw.exe'
     app_icon = os.path.join(res_path, 'eavatar.ico')
     plat_name = 'ava-win32'
+    app_name = 'avagui_win32.py'
+    console = False
+
 elif sys.platform.startswith('linux'):
-    ext_name = '.lin'
+    exe_name = 'avaw.exe'
     run_strip = True
     plat_name = 'ava-linux'
+    app_name = 'avagui_linux.py'
+
 elif sys.platform.startswith('darwin'):
     plat_name = 'ava-osx'
     run_upx = False
     # to hide the dock icon.
     console = True
+    app_name = 'avagui_osx.py'
+    extra_binaries.append( ('libsodium.dylib', os.path.join(lib_path, 'libsodium.13.dylib'), 'BINARY'))
+
 else:
-    ext_name = ''
+    sys.exit(-1)
 
 # for copying data file according to PyInstaller's recipe
 def Datafiles(*filenames, **kw):
@@ -48,12 +59,12 @@ def Datafiles(*filenames, **kw):
 
 #shfile = Datafiles('pack/ava', '')
 
-a = Analysis([os.path.join(app_path,'avagui.py')],
-             pathex=['src'],
+a = Analysis([os.path.join(app_path,app_name)],
+             pathex=[app_path],
              hiddenimports=hiddenimports,
              hookspath=None,
              runtime_hooks=None,
-             excludes=['PyQt4', 'wx', 'django', 'Tkinter', 'objc', 'AppKit', 'Foundation'])
+             excludes=['PyQt4', 'wx', 'django', 'Tkinter',])
 
 pyz = PYZ(a.pure)
 exe = EXE(pyz,
@@ -69,7 +80,7 @@ exe = EXE(pyz,
 
 
 coll = COLLECT(exe,
-               a.binaries,
+               a.binaries + extra_binaries,
                a.zipfiles,
                Tree(os.path.join(app_path, 'pod'), 'pod', excludes=['*.pyc']),
                Tree(res_path, 'res', excludes=['*.pyc']),

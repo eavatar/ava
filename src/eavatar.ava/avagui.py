@@ -4,9 +4,11 @@
 The launcher for EAvatar to run in a text console or headless environment.
 """
 
+import os
 import sys
 import logging
 import multiprocessing
+from ava.runtime import environ
 
 #makes multiprocessing work when in freeze mode.
 multiprocessing.freeze_support()
@@ -26,13 +28,6 @@ except ImportError:
         def emit(self, record):
             pass
 
-# imports platform-specific dependencies.
-if sys.platform.startswith('darwin'):
-    import gui_osx
-elif sys.platform.startswith('linux'):
-    import gui_linux
-elif sys.platform.startswith('win32'):
-    import gui_win32
 
 from ava.shell import factory
 
@@ -40,6 +35,10 @@ logger = logging.getLogger("ava")
 
 
 def main():
+    os.chdir(environ.base_dir())
+    from libnacl import _get_nacl
+    _get_nacl()
+
     shell = factory.create()
     shell.do_run()
 
