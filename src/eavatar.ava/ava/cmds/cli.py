@@ -28,7 +28,7 @@ def cli(ctx, verbose):
 
     app_dir = click.get_app_dir('.ava')
     if not os.path.exists(app_dir):
-        os.mkdir(app_dir, 0700)
+        os.makedirs(app_dir, 0700)
     if verbose > 2:
         click.echo("Location for configuration files: %s" % app_dir)
 
