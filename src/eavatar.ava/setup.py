@@ -19,7 +19,6 @@ setup(
                       'libnacl',
                       'lmdb',
                       'msgpack-python',
-                      'pycrypto',
                       'PyDispatcher',
                       'PyYAML',
                       'pyscrypt',
