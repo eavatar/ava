@@ -12,6 +12,8 @@ import logging
 import logging.config
 import msgpack
 
+# workaround for missing codec in Tiny core linux
+from encodings import hex_codec, ascii, utf_8, utf_32
 from click import group, command
 
 import ws4py
