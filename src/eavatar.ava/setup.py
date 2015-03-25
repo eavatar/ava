@@ -11,7 +11,8 @@ setup(
     packages=find_packages(exclude=['tests']),
     include_package_data=True,
 
-    install_requires=['base58',
+    install_requires=['backports.ssl-match-hostname',
+                      'base58',
                       'bottle',
                       'click',
                       'gevent',
@@ -23,7 +24,11 @@ setup(
                       'PyYAML',
                       'pyscrypt',
                       'requests',
-                      'ws4py'],
+                      'six',
+                      'ujson',
+                      'ws4py',
+                      'wsaccel'],
+
     test_suite='nose.collector',
     zip_safe=False,
 
