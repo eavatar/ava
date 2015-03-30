@@ -11,3 +11,9 @@ pack_in_container:
 	chown -R ava:ava /app_pack
 	su - ava -c "cd /app_pack && ./pack/build_srv_pkg.sh"
 	cp -rf /app_pack/dist/ava /app/dist/
+
+
+tests:
+	bin/py.test src/eavatar.ava/tests/unit
+	bin/py.test src/eavatar.ava/tests/integration
+	bin/py.test src/eavatar.ava/tests/functional
