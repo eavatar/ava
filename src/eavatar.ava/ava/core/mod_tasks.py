@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, print_function, unicode_literals
 """
-Loading modules for exposing web resources or providing REST APIs.
+Loading modules that provide task codes.
 """
 import os
 import sys
@@ -13,10 +13,10 @@ from ava.spi.signals import MODULE_LOADED
 
 logger = logging.getLogger(__name__)
 
-_MODULES_DIR = os.path.join('mods', 'webhooks')
+_MODULES_DIR = os.path.join('mods', 'tasks')
 
 # the package name for modules.
-_MODULE_PKG = 'mods.webhooks.'
+_MODULE_PKG = 'mods.tasks.'
 
 
 class ModuleInfo(object):
@@ -38,7 +38,7 @@ class ModuleInfo(object):
         self._mod = mod
 
 
-class WebhooksEngine(object):
+class TaskModEngine(object):
     """
     Responsible for managing application modules.
     """
@@ -54,11 +54,11 @@ class WebhooksEngine(object):
 
     def _load_modules(self, ctx):
         sys.path.append(environ.pod_dir())
-        logger.debug("Webhooks module directory: %s", self.modules_path)
+        logger.debug("Tasks module directory: %s", self.modules_path)
 
         module_files = self._scan_modules()
 
-        logger.debug("Found %d webhook module(s)" % len(module_files))
+        logger.debug("Found %d task module(s)" % len(module_files))
 
         for s in module_files:
             name = os.path.basename(s)
@@ -68,19 +68,19 @@ class WebhooksEngine(object):
             # gets the basename without extension part.
             name = os.path.splitext(name)[0]
             try:
-                logger.debug("Loading webhook module: %s", name)
+                logger.debug("Loading task module: %s", name)
                 mod = import_module(_MODULE_PKG + name)
                 mod_info = ModuleInfo(name, mod)
                 self.modules[name] = mod_info
 
                 ctx.send(signal=MODULE_LOADED, sender=self)
             except ImportError:
-                logger.error("Failed to import webhook module: %s", name, exc_info=True)
+                logger.error("Failed to import task module: %s", name, exc_info=True)
 
     def start(self, ctx):
-        logger.debug("Starting webhook module engine...")
+        logger.debug("Starting task module engine...")
         self._load_modules(ctx)
-        logger.debug("Webhook module engine started.")
+        logger.debug("Task module engine started.")
 
     def stop(self, ctx):
-        logger.debug("Webhook module engine stopped.")
+        logger.debug("Task module engine stopped.")
