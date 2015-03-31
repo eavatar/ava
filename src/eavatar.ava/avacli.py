@@ -31,8 +31,9 @@ logger = logging.getLogger("ava")
 
 
 def main():
-    from ava.cmds import cli
+    from ava.cmds.cli import cli, load_commands
 
+    load_commands()
     return cli(auto_envvar_prefix='AVA')
 
 if __name__ == '__main__':

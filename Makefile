@@ -17,3 +17,6 @@ tests:
 	bin/py.test src/eavatar.ava/tests/unit
 	bin/py.test src/eavatar.ava/tests/integration
 	bin/py.test src/eavatar.ava/tests/functional
+
+upload_sdist:
+	bin/buildout setup src/eavatar.ava sdist upload

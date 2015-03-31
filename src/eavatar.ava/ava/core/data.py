@@ -19,22 +19,9 @@ _DATA_FILE_DIR = 'data'
 logger = logging.getLogger(__name__)
 
 
-class DataEngineBase(object):
-    """
-    Persistent data management.
-    """
+class DataEngine(object):
     def __init__(self):
         logger.debug("Initializing data engine...")
-
-    def run(self):
-        logger.debug("Starting data engine...")
-        while True:
-            time.sleep(30)
-
-
-class DataEngine(DataEngineBase):
-    def __init__(self):
-        super(DataEngine, self).__init__()
         self.datapath = None
         self.database = None
 

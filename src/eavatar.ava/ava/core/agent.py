@@ -159,7 +159,10 @@ class Agent(object):
         self._context.send(signal=AGENT_STOPPING, sender=self)
 
         for it in reversed(self._engines):
-            it.stop(self._context)
+            try:
+                it.stop(self._context)
+            except:
+                logger.warning("Error while stopping %s", it.__name__)
 
     def context(self):
         return self._context
