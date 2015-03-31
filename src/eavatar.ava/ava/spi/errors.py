@@ -20,6 +20,14 @@ class DataError(AvaError):
     pass
 
 
+class DataNotFoundError(DataError):
+    pass
+
+
+class DataExistError(DataError):
+    pass
+
+
 class TaskAlreadyRegistered(AvaError):
     """ Raised to indicate a task is being registered with the same key as a
     existing one.
