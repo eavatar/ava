@@ -22,12 +22,14 @@ if sys.platform == 'win32':
     plat_name = 'ava-win32'
     app_name = 'avagui_win32.py'
     console = False
+    extra_binaries.append( ('libsodium.dll', os.path.join(lib_path, 'libsodium.dll'), 'BINARY'))
 
 elif sys.platform.startswith('linux'):
     exe_name = 'avaw.exe'
     run_strip = True
     plat_name = 'ava-linux'
     app_name = 'avagui_linux.py'
+    extra_binaries.append( ('libsodium.so.13', os.path.join(lib_path, 'libsodium.so.13.1.0'), 'BINARY'))
 
 elif sys.platform.startswith('darwin'):
     plat_name = 'ava-osx'

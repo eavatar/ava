@@ -3,7 +3,7 @@ from __future__ import print_function, division, absolute_import
 
 import unittest
 
-from ava.spi.context import Context
+from ava.spi import signals
 
 
 class Receiver(object):
@@ -14,26 +14,23 @@ class Receiver(object):
         self.called = True
 
 
-class CoreContextTest(unittest.TestCase):
-
-    def setUp(self):
-        self.context = Context(None)
+class SignalsTest(unittest.TestCase):
 
     def test_send_signal(self):
         SIGNAL = 'my-first-signal'
 
         receiver = Receiver()
-        self.context.connect(receiver, signal=SIGNAL)
-        self.context.send(signal=SIGNAL)
+        signals.connect(receiver, signal=SIGNAL)
+        signals.send(signal=SIGNAL)
         self.assertTrue(receiver.called)
 
     def test_connect_and_then_disconnect(self):
         SIGNAL = 'my-second-signal'
         receiver = Receiver()
-        self.context.connect(receiver)
-        self.context.send(signal=SIGNAL)
+        signals.connect(receiver)
+        signals.send(signal=SIGNAL)
         self.assertTrue(receiver.called)
         receiver.called = False
-        self.context.disconnect(receiver)
-        self.context.send(signal=SIGNAL)
+        signals.disconnect(receiver)
+        signals.send(signal=SIGNAL)
         self.assertFalse(receiver.called)

@@ -191,10 +191,7 @@ class Cursor(object):
         :return:
         """
         if self._cursor.first():
-            value = self.value()
-            self._cursor.delete(True)
-            return value
-        return None
+            return self._cursor.pop(self._cursor.key())
 
     def put(self, key, value):
         if isinstance(key, unicode):

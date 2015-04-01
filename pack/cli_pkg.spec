@@ -1,6 +1,7 @@
 # -*- mode: python -*-
 # -*- coding: utf-8 -*-
 
+lib_path = os.path.join('src', 'libs')
 app_path = os.path.join('src', 'eavatar.ava')
 res_path = os.path.join(app_path, 'res')
 
@@ -9,6 +10,7 @@ exe_name = 'ava'
 hiddenimports = []
 run_strip = False
 run_upx = False
+extra_binaries = []
 
 
 if sys.platform.startswith('win32'):
@@ -16,11 +18,17 @@ if sys.platform.startswith('win32'):
     app_icon = os.path.join(res_path, 'eavatar.ico')
     plat_name = 'ava-win32'
     run_strip = False
+    extra_binaries.append( ('libsodium.dll', os.path.join(lib_path, 'libsodium.dll'), 'BINARY'))
+
 elif sys.platform.startswith('linux'):
     plat_name = 'ava-linux'
     run_strip = True
+    extra_binaries.append( ('libsodium.so.13', os.path.join(lib_path, 'libsodium.so.13.1.0'), 'BINARY'))
+
 elif sys.platform.startswith('darwin'):
     plat_name = 'ava-osx'
+    extra_binaries.append( ('libsodium.dylib', os.path.join(lib_path, 'libsodium.13.dylib'), 'BINARY'))
+
 else:
     ext_name = ''
 
@@ -64,7 +72,7 @@ exe = EXE(pyz,
 
 
 coll = COLLECT(exe,
-               a.binaries,
+               a.binaries + extra_binaries,
                a.zipfiles,
                Tree(os.path.join(app_path, 'pod'), 'pod', excludes=['*.pyc']),
                Tree(res_path, 'res', excludes=['*.pyc']),
