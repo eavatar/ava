@@ -104,7 +104,7 @@ class TaskEngine(object):
     def start(self, ctx):
         logger.debug("Starting task engine...")
         self.context = ctx
-        self.context['task_engine'] = self
+        self.context['taskengine'] = self
 
     def stop(self, ctx):
         logger.debug("Stopping task engine...")

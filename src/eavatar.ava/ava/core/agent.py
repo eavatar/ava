@@ -146,8 +146,8 @@ class Agent(object):
             name, engine_cls = load_class(it)
             engine = engine_cls()
 
-            self._context.bind(name, engine)
-            self._engines.append(self._context[name])
+            # self._context.bind(name.lower(), engine)
+            self._engines.append(engine)
 
         logger.debug("Starting engines...")
         for it in self._engines:

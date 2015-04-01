@@ -17,15 +17,18 @@ class DataError(AvaError):
     """
     Generic error related to database operations.
     """
-    pass
+    def __init__(self, *args, **kwargs):
+        super(DataError, self).__init__(*args, **kwargs)
 
 
 class DataNotFoundError(DataError):
-    pass
+    def __init__(self, *args, **kwargs):
+        super(DataNotFoundError, self).__init__(*args, **kwargs)
 
 
 class DataExistError(DataError):
-    pass
+    def __init__(self, *args, **kwargs):
+        super(DataExistError, self).__init__(*args, **kwargs)
 
 
 class TaskAlreadyRegistered(AvaError):

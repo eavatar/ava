@@ -9,19 +9,17 @@ from __future__ import absolute_import, division, unicode_literals
 
 import os
 import logging
-import msgpack
 import lmdb
-import six
-from ava.runtime import environ
 from ava.util import time_uuid
-from ava.spi.errors import DataNotFoundError, DataExistError
+from ava.runtime import environ
+from ava.spi.errors import DataNotFoundError, DataError
 
 _DATA_FILE_DIR = b'data'
 
 logger = logging.getLogger(__name__)
 
 
-class DocStore(object):
+class Store(object):
     def __init__(self, name, _db, _engine):
         self.name = name
         self._db = _db
@@ -32,36 +30,38 @@ class DocStore(object):
             stat = txn.stat(self._db)
             return stat['entries']
 
-    def __getitem__(self, _id):
+    def __getitem__(self, key):
         with self._engine.cursor(self.name) as cur:
-            return cur.get(_id)
+            return cur.get(key)
 
-    def __setitem__(self, _id, doc):
+    def __setitem__(self, key, value):
         with self._engine.cursor(self.name, readonly=False) as cur:
-            doc['_id'] = _id
-            cur.put(doc)
+            cur.put(key, value)
 
-    def __delitem__(self, _id):
+    def __delitem__(self, key):
         with self._engine.cursor(self.name, readonly=False) as cur:
-            cur.remove(_id)
+            cur.remove(key)
 
     def __iter__(self):
-        return self._engine.cursor(self.name)._cursor.iternext(
-            keys=True, values=False)
+        return self._engine.cursor(self.name).iternext()
 
-    def save(self, doc):
+    def put(self, key, value):
         with self._engine.cursor(self.name, readonly=False) as cur:
-            return cur.put(doc)
+            return cur.put(key, value)
 
-    def get(self, id):
+    def get(self, key):
         with self._engine.cursor(self.name, readonly=True) as cur:
-            return cur.get(id)
+            return cur.get(key)
+
+    def remove(self, key):
+        with self._engine.cursor(self.name, readonly=False) as cur:
+            return cur.remove(key)
 
     def cursor(self, readonly=True):
         return self._engine.cursor(self.name, readonly=readonly)
 
 
-class DocCursor(object):
+class Cursor(object):
     def __init__(self, _txn, _db, _readonly=True):
 
         self._txn = _txn
@@ -71,7 +71,7 @@ class DocCursor(object):
 
     def __enter__(self, *args, **kwargs):
         self._txn.__enter__(*args, **kwargs)
-        self._cursor.__enter__(*args, **kwargs)
+        self._cursor.__enter__()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -90,11 +90,11 @@ class DocCursor(object):
     def last(self):
         return self._cursor.last()
 
-    def current_doc(self):
-        return msgpack.unpackb(self._cursor.value())
+    def iternext(self, keys=True, values=False):
+        return self._cursor.iternext(keys=True, values=False)
 
-    def current_id(self):
-        return self._cursor.key()
+    def iterprev(self, keys=True, values=False):
+        return self._cursor.iterprev(keys=True, values=False)
 
     def close(self):
         self._cursor.close()
@@ -109,20 +109,18 @@ class DocCursor(object):
     def key(self):
         return self._cursor.key()
 
-    def get(self, _id):
-        key = _id
+    def get(self, key):
         if not self._cursor.set_key(key):
             return None
 
-        return msgpack.unpackb(self._cursor.value())
+        return self._cursor.value()
 
-    def load(self, _id):
+    def load(self, key):
         """
         Same as get method, except raising exception if entry not found.
-        :param _id: the document's ID.
-        :return: the document object.
+        :param _key: item key.
+        :return: the value.
         """
-        key = _id
         ret = self.get(key)
         if ret is None:
             raise DataNotFoundError()
@@ -135,44 +133,42 @@ class DocCursor(object):
         """
         return self._cursor.delete(True)
 
-    def remove(self, _id):
+    def remove(self, key):
         """
         Delete the current element and move to the next, returning True on
         success or False if the store was empty
         :return:
         """
-        if isinstance(_id, unicode):
-            _id = _id.encode('utf-8')
+        if isinstance(key, unicode):
+            key = key.encode('utf-8')
 
-        key = _id
         if not self._cursor.set_key(key):
-            return None
+            return False
 
         return self._cursor.delete(True)
 
-    def seek(self, _id):
+    def seek(self, key):
         """
         Finds the document with the provided ID and moves position to its first revision.
 
-        :param docid:
+        :param key:
         :return: True if found; False, otherwise.
         """
-        key = _id
-        if self._cursor.set_key(key):
-            return True
-        else:
-            return False
+        if isinstance(key, unicode):
+            key = key.encode('utf-8')
 
-    def seek_range(self, doc_id):
+        return self._cursor.set_key(key)
+
+    def seek_range(self, key):
         """
         Finds the document whose ID is greater than or equal to the provided
         ID and moves position to its first revision.
 
-        :param doc_id:
+        :param key:
         :return:
         """
 
-        return self._cursor.set_range(doc_id)
+        return self._cursor.set_range(key)
 
     def count(self):
         """
@@ -182,6 +178,12 @@ class DocCursor(object):
         """
         return self._cursor.count()
 
+    def post(self, value):
+        key = time_uuid.utcnow().hex
+        if self._cursor.put(key, value):
+            return key
+        return None
+
     def pop(self):
         """
         Fetch the first document then delete it. Returns None if no value
@@ -189,55 +191,22 @@ class DocCursor(object):
         :return:
         """
         if self._cursor.first():
-            doc = self.current_doc()
+            value = self.value()
             self._cursor.delete(True)
-            return doc
+            return value
         return None
 
-    def put(self, doc):
-        _id = doc.get('_id')
+    def put(self, key, value):
+        if isinstance(key, unicode):
+            key = key.encode('utf-8')
 
-        if _id is None:
-            _id = time_uuid.utcnow().hex
-            key = _id
-            doc['_id'] = _id
-            self._cursor.put(key, msgpack.packb(doc))
-            return _id
+        return self._cursor.put(key, value)
 
-        if isinstance(_id, unicode):
-            _id = _id.encode('utf-8')
-            doc['_id'] = _id
-        key = _id
+    def exists(self, key):
+        if isinstance(key, unicode):
+            key = key.encode('utf-8')
+
         if self._cursor.set_key(key):
-            # document exists.
-            raise DataExistError()
-
-        self._cursor.put(key, msgpack.packb(doc))
-        return _id
-
-    def post(self, doc):
-        """
-        Creates a new document revision.
-        :param doc:
-        :return: _id
-        """
-        _id = doc.get('_id')
-
-        if _id is None:
-            _id = time_uuid.utcnow().hex
-            doc['_id'] = _id
-            self._cursor.put(_id, msgpack.packb(doc))
-            return _id
-
-        _id = _id.encode('utf-8')
-        self._cursor.put(_id, msgpack.packb(doc))
-        return _id
-
-    def exists(self, _id):
-        if isinstance(_id, six.string_types):
-            _id = _id.encode('utf-8')
-
-        if self._cursor.set_key(_id):
             return True
         return False
 
@@ -252,6 +221,9 @@ class DataEngine(object):
     def start(self, ctx=None):
         logger.debug("Starting data engine...")
 
+        # register with the context
+        ctx.bind('dataengine', self)
+
         self.datapath = os.path.join(environ.pod_dir(), _DATA_FILE_DIR)
         logger.debug("Data path: %s", self.datapath)
 
@@ -262,7 +234,7 @@ class DataEngine(object):
                 for k, v in iter(cur):
                     logger.debug("Found existing store: %s", k)
                     _db = self.database.open_db(k, create=False)
-                    self.stores[k] = DocStore(k, _db, self)
+                    self.stores[k] = Store(k, _db, self)
         except lmdb.Error:
             logger.exception("Failed to open database.", exc_info=True)
             raise
@@ -279,15 +251,15 @@ class DataEngine(object):
     def store_names(self):
         return self.stores.keys()
 
-    def create_store(self, name, revisions=True):
+    def create_store(self, name):
         try:
-            _db = self.database.open_db(name, dupsort=revisions, create=True)
-            store = DocStore(name, _db, self)
+            _db = self.database.open_db(name, dupsort=False, create=True)
+            store = Store(name, _db, self)
             self.stores[name] = store
             return store
-        except lmdb.Error, e:
-            logger.exception(e)
-            raise
+        except lmdb.Error as ex:
+            logger.exception(ex)
+            raise DataError(ex.message)
 
     def get_store(self, name):
         return self.stores.get(name)
@@ -299,9 +271,9 @@ class DataEngine(object):
                 with self.database.begin(write=True) as txn:
                     txn.drop(store._db)
                 del self.stores[name]
-        except lmdb.Error, e:
-            logger.exception("Failed to remove store.", e)
-            raise
+        except lmdb.Error as ex:
+            logger.exception("Failed to remove store.", ex)
+            raise DataError(ex.message)
 
     def remove_all_stores(self):
         for name in self.stores.keys():
@@ -317,7 +289,7 @@ class DataEngine(object):
 
         _db = self.database.open_db(store_name, create=False, dupsort=True)
         _txn = self.database.begin(write=_write, buffers=False)
-        return DocCursor(_txn, _db, _readonly=readonly)
+        return Cursor(_txn, _db, _readonly=readonly)
 
     def stat(self):
         ret = self.database.stat()

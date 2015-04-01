@@ -18,6 +18,7 @@ class TaskEngineTests(unittest.TestCase):
         logging.basicConfig(level=logging.DEBUG)
         self.engine = TaskEngine()
         self.ctx = Context(None)
+        self.ctx.bind('taskengine', self.engine)
         self.engine.start(self.ctx)
         self.logger = logging.getLogger(__name__)
 
