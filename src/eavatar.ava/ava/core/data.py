@@ -258,8 +258,11 @@ class DataEngine(object):
             logger.exception(ex)
             raise DataError(ex.message)
 
-    def get_store(self, name):
-        return self.stores.get(name)
+    def get_store(self, name, create=True):
+        result = self.stores.get(name)
+        if result is None and create:
+            return self.create_store(name)
+        return result
 
     def remove_store(self, name):
         try:
