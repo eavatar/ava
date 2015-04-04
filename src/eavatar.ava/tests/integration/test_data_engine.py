@@ -16,13 +16,14 @@ class TestDataEngine(unittest.TestCase):
         self.ctx = Context(None)
         self.ctx.bind('dataengine', self.engine)
         self.engine.start(self.ctx)
+        self.engine.remove_all_stores()
 
     def tearDown(self):
         self.engine.remove_all_stores()
         self.engine.stop(self.ctx)
 
     def test_create_and_remove_store(self):
-        store = self.engine.get_store("testdb")
+        store = self.engine.get_store("testdb", create=False)
         self.assertIsNone(store)
 
         store = self.engine.create_store("testdb")
@@ -38,7 +39,7 @@ class TestDataEngine(unittest.TestCase):
         self.assertIs(store, store2)
 
         del self.engine["testdb"]
-        store = self.engine.get_store("testdb")
+        store = self.engine.get_store("testdb", create=False)
         self.assertFalse(self.engine.store_exists("testdb"))
 
     def test_crud(self):
